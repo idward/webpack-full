@@ -1,16 +1,19 @@
 const { resolve } = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
+// const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
 // PWA 插件
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+// Dll配置文件注入html
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin');
 
 const merge = require('webpack-merge');
 const devConfig = require('./webpack.dev');
 const prodConfig = require('./webpack.prod');
 
 // 统计打包时间分析工具
-const smp = new SpeedMeasureWebpackPlugin();
+// const smp = new SpeedMeasureWebpackPlugin();
 
 // commonCss处理
 // 开发模式用style-loader
@@ -135,9 +138,9 @@ const commonConfig = mode => ({
     ],
   },
   // cdn外部链接引用
-  externals: {
-    lodash: 'lodash',
-  },
+  // externals: {
+  //   lodash: 'lodash',
+  // },
   // optimization: {
   //   splitChunks: {
   //     chunks: 'all',
@@ -155,10 +158,17 @@ const commonConfig = mode => ({
               removeComments: true,
             },
     }),
+    new AddAssetHtmlWebpackPlugin({
+      filepath: resolve(__dirname, 'dll', '*.js')
+    }),
     // PWA
     new WorkboxWebpackPlugin.GenerateSW({
       clientsClaim: true, // 更快启动serviceWorker
       skipWaiting: true, // 删除旧的文件
+    }),
+    // 读取dll动态打包配置文件
+    new webpack.DllReferencePlugin({
+      manifest: resolve(__dirname, 'dll', 'manifest.json'),
     }),
   ],
 });
@@ -175,5 +185,6 @@ module.exports = mode => {
     config = merge(commonConfig(mode), devConfig, { mode });
   }
 
-  return smp.wrap(config);
+  return config;
+  // return smp.wrap(config);
 };
