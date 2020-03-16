@@ -134,11 +134,15 @@ const commonConfig = mode => ({
       },
     ],
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
+  // cdn外部链接引用
+  externals: {
+    lodash: 'lodash',
   },
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all',
+  //   },
+  // },
   plugins: [
     new HtmlWebpackPlugin({
       template: resolve(__dirname, 'src', 'index.html'),
