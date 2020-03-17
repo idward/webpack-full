@@ -2,7 +2,7 @@
 import '../assets/css/main.css';
 import '../assets/css/iconfont.css';
 import '../assets/css/index.scss';
-import * as _ from 'lodash';
+import { get } from 'lodash';
 import print from './print';
 
 // ServiceWorker
@@ -39,7 +39,7 @@ document.getElementById('lazy').addEventListener('click', () => {
 // eslint-disable-next-line
 console.log(add(2, 2));
 // eslint-disable-next-line
-console.log(_);
+get({ a: 11 }, 'a', null);
 
 // import(/* webpackChunkName:'test' */'./test.js')
 //   .then(m => {

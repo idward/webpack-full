@@ -141,11 +141,31 @@ const commonConfig = mode => ({
   // externals: {
   //   lodash: 'lodash',
   // },
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: 'all',
-  //   },
-  // },
+  optimization: {
+    // runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      // cacheGroups: {
+        // lodashBase: {
+        //   name: 'lodashBase',
+        //   test: module => {
+        //     console.log('module:', module.context);
+        //     return /lodash/.test(module.context);
+        //   },
+        //   priority: -10,
+        //   reuseExistingChunk: true,
+        // },
+        // common: {
+        //   test: /[\\/]node_modules[\\/]/,
+        //   name: 'common',
+        //   chunks: 'initial',
+        //   priority: 2,
+        //   minChunks: 1,
+        //   reuseExistingChunk: true,
+        // },
+      // },
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: resolve(__dirname, 'src', 'index.html'),
@@ -158,18 +178,18 @@ const commonConfig = mode => ({
               removeComments: true,
             },
     }),
-    new AddAssetHtmlWebpackPlugin({
-      filepath: resolve(__dirname, 'dll', '*.js')
-    }),
+    // new AddAssetHtmlWebpackPlugin({
+    //   filepath: resolve(__dirname, 'dll', '*.js')
+    // }),
     // PWA
     new WorkboxWebpackPlugin.GenerateSW({
       clientsClaim: true, // 更快启动serviceWorker
       skipWaiting: true, // 删除旧的文件
     }),
     // 读取dll动态打包配置文件
-    new webpack.DllReferencePlugin({
-      manifest: resolve(__dirname, 'dll', 'manifest.json'),
-    }),
+    // new webpack.DllReferencePlugin({
+    //   manifest: resolve(__dirname, 'dll', 'manifest.json'),
+    // }),
   ],
 });
 
